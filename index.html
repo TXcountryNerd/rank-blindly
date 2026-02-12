@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rank Blindly</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const CATEGORIES = {
+      food: {
+        name: "Food",
+        items: [
+          "Pizza", "Burgers", "Steak", "Fried chicken", "Chicken wings", "Tacos", "Burritos", "Ribs", "Hot dogs", "Spaghetti",
+          "Lasagna", "Mac and cheese", "Grilled cheese", "Mashed potatoes", "French fries", "Onion rings", "Chicken nuggets",
+          "Meatballs", "Sloppy joes", "BBQ pulled pork", "Roast chicken", "Ham", "Turkey", "Pork chops", "Sushi", "Ramen",
+          "Pad thai", "Fried rice", "Stir-fry", "Quesadillas", "Nachos", "Chili", "Beef stew", "Tater tots", "Baked potatoes",
+          "Corn on the cob", "Green beans", "Carrots", "Broccoli", "Caesar salad", "Pancakes", "Waffles", "Omelet",
+          "Grilled salmon", "Shrimp", "Fish tacos", "Meatloaf", "Shepherd's pie", "Pizza rolls", "Mozzarella sticks"
+        ]
+      },
+      cities_visit: {
+        name: "Cities to Visit",
+        items: [
+          "New York City", "Los Angeles", "Chicago", "Miami", "Orlando", "Las Vegas", "San Francisco", "Seattle", "San Diego",
+          "Austin", "New Orleans", "Nashville", "Denver", "Boston", "Washington, DC", "Atlanta", "Phoenix", "Dallas", "Houston",
+          "San Antonio", "Toronto", "Vancouver", "Mexico City", "Cancun", "London", "Paris", "Rome", "Venice", "Barcelona",
+          "Amsterdam", "Dublin", "Edinburgh", "Reykjavik", "Tokyo", "Kyoto", "Osaka", "Seoul", "Bangkok", "Singapore",
+          "Sydney", "Melbourne", "Auckland", "Honolulu", "Maui", "Nassau", "Punta Cana"
+        ]
+      },
+      disney_movies: {
+        name: "Disney Movies",
+        items: [
+          "Snow White and the Seven Dwarfs", "Cinderella", "Sleeping Beauty", "The Jungle Book", "The Little Mermaid",
+          "Beauty and the Beast", "Aladdin", "The Lion King", "Pocahontas", "Mulan", "Tarzan", "Lilo & Stitch",
+          "Finding Nemo", "The Incredibles", "Cars", "Ratatouille", "WALL·E", "Up", "Tangled", "Frozen", "Big Hero 6",
+          "Zootopia", "Moana", "Encanto", "Toy Story", "Toy Story 2", "Toy Story 3", "Toy Story 4", "Star Wars: A New Hope",
+          "The Empire Strikes Back", "Return of the Jedi", "The Force Awakens", "Rogue One", "Iron Man",
+          "Captain America: The First Avenger", "The Avengers", "Guardians of the Galaxy", "Black Panther",
+          "Avengers: Infinity War", "Avengers: Endgame"
+        ]
+      },
+      pets: {
+        name: "Types of Pets",
+        items: [
+          "Dog", "Cat", "Fish", "Hamster", "Gerbil", "Guinea pig", "Rabbit", "Turtle", "Snake", "Lizard", "Frog", "Bird",
+          "Parrot", "Canary", "Chicken", "Duck", "Goat", "Pig", "Ferret", "Hedgehog", "Chinchilla", "Axolotl", "Tarantula",
+          "Hermit crab", "Sugar glider", "Mini horse", "Bearded dragon", "Leopard gecko", "Corn snake", "Ball python"
+        ]
+      },
+      toys: {
+        name: "Toys",
+        items: [
+          "LEGO sets", "Action figures", "Nerf blasters", "Board games", "Card games", "RC cars", "Drones", "Building blocks",
+          "Play-Doh", "Puzzle games", "STEM kits", "Science kits", "Magic kits", "Model kits", "Plush toys", "Hot Wheels",
+          "Matchbox cars", "Beyblades", "Transformers", "Pokémon cards", "Pokémon figures", "Dolls", "Dollhouses",
+          "Marble runs", "Kinetic sand", "Scooter", "Skateboard", "Basketball hoop", "Soccer ball", "Baseball glove",
+          "Nintendo Switch", "PlayStation", "Xbox", "PC gaming", "Handheld gaming console"
+        ]
+      },
+      snacks: {
+        name: "Snacks",
+        items: [
+          "Potato chips", "Doritos", "Cheetos", "Popcorn", "Pretzels", "Cheese puffs", "Crackers", "Cookies", "Brownies",
+          "Cupcakes", "Donuts", "Candy bars", "Gummies", "Sour candy", "Chocolate", "Ice cream", "Ice cream sandwiches",
+          "Popsicles", "Slushies", "Milkshakes", "Nacho cheese dip", "Cheese sticks", "Pizza rolls", "Corn dogs",
+          "Toaster pastries"
+        ]
+      },
+      sports: {
+        name: "Sports",
+        items: [
+          "Basketball", "Football", "Baseball", "Soccer", "Hockey", "Tennis", "Golf", "Swimming", "Track and field",
+          "Cross country", "Wrestling", "Boxing", "MMA", "Volleyball", "Beach volleyball", "Lacrosse", "Rugby", "Cricket",
+          "Cycling", "Skateboarding", "Snowboarding", "Skiing", "Surfing", "Gymnastics", "Weightlifting", "Cheerleading"
+        ]
+      },
+      breakfast: {
+        name: "Breakfast Food",
+        items: [
+          "Eggs", "Scrambled eggs", "Omelet", "Pancakes", "Waffles", "French toast", "Bacon", "Sausage", "Hash browns",
+          "Breakfast potatoes", "Biscuits", "Gravy", "Bagels", "Cream cheese", "Toast", "Cereal", "Oatmeal", "Yogurt",
+          "Granola", "Smoothies", "Breakfast burritos", "Breakfast sandwiches", "Donuts", "Muffins", "Pop-Tarts"
+        ]
+      },
+      cars: {
+        name: "Cars",
+        items: [
+          "Sedan", "Coupe", "Hatchback", "Wagon", "SUV", "Crossover", "Minivan", "Pickup truck", "Compact car", "Subcompact",
+          "Sports car", "Supercar", "Muscle car", "Luxury sedan", "Luxury SUV", "Hybrid", "Electric car", "Plug-in hybrid",
+          "Off-road vehicle", "Jeep", "Convertible", "Roadster", "Van", "Box truck", "Semi truck"
+        ]
+      },
+    };
+
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    const RankBlindly = () => {
+      const [gamePhase, setGamePhase] = useState('category');
+      const [selectedCategory, setSelectedCategory] = useState(null);
+      const [items, setItems] = useState([]);
+      const [currentItemIndex, setCurrentItemIndex] = useState(0);
+      const [rankings, setRankings] = useState({});
+
+      const usedRanks = Object.values(rankings);
+      const availableRanks = [1, 2, 3, 4, 5].filter(r => !usedRanks.includes(r));
+
+      const selectCategory = (categoryKey) => {
+        const category = CATEGORIES[categoryKey];
+        const shuffled = shuffleArray(category.items);
+        const selectedItems = shuffled.slice(0, 5);
+        setSelectedCategory({ key: categoryKey, ...category });
+        setItems(selectedItems);
+        setGamePhase('ranking');
+      };
+
+      const assignRank = (rank) => {
+        const newRankings = { ...rankings, [currentItemIndex]: rank };
+        setRankings(newRankings);
+        
+        if (currentItemIndex < 4) {
+          setCurrentItemIndex(currentItemIndex + 1);
+        } else {
+          setGamePhase('results');
+        }
+      };
+
+      const resetGame = () => {
+        setGamePhase('category');
+        setSelectedCategory(null);
+        setItems([]);
+        setCurrentItemIndex(0);
+        setRankings({});
+      };
+
+      const playAgainSameCategory = () => {
+        const category = CATEGORIES[selectedCategory.key];
+        const shuffled = shuffleArray(category.items);
+        const selectedItems = shuffled.slice(0, 5);
+        setItems(selectedItems);
+        setCurrentItemIndex(0);
+        setRankings({});
+        setGamePhase('ranking');
+      };
+
+      const getSortedResults = () => {
+        return items
+          .map((item, index) => ({ item, rank: rankings[index], originalIndex: index }))
+          .sort((a, b) => a.rank - b.rank);
+      };
+
+      if (gamePhase === 'category') {
+        return (
+          <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+            <div className="max-w-md w-full text-center">
+              <h1 className="text-4xl font-bold mb-2">Rank Blindly</h1>
+              <p className="text-gray-400 mb-8">Pick a category. Rank 5 items as they appear—no take-backs.</p>
+              
+              <div className="grid grid-cols-2 gap-3">
+                {Object.entries(CATEGORIES).map(([key, category]) => (
+                  <button
+                    key={key}
+                    onClick={() => selectCategory(key)}
+                    className="bg-gray-800 hover:bg-gray-700 py-4 px-4 rounded-lg transition text-left"
+                  >
+                    <div className="font-semibold">{category.name}</div>
+                    <div className="text-xs text-gray-500">{category.items.length} options</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (gamePhase === 'ranking') {
+        const currentItem = items[currentItemIndex];
+        
+        return (
+          <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+            <div className="max-w-md w-full text-center">
+              <p className="text-gray-400 mb-2">{selectedCategory.name}</p>
+              <p className="text-sm text-gray-500 mb-6">Item {currentItemIndex + 1} of 5</p>
+              
+              <div className="bg-gray-800 rounded-xl p-8 mb-8">
+                <h2 className="text-3xl font-bold">{currentItem}</h2>
+              </div>
+              
+              <p className="text-gray-400 mb-4">Assign a rank (1 = best):</p>
+              <div className="flex justify-center gap-3">
+                {[1, 2, 3, 4, 5].map(rank => (
+                  <button
+                    key={rank}
+                    onClick={() => assignRank(rank)}
+                    disabled={!availableRanks.includes(rank)}
+                    className={`w-14 h-14 rounded-lg text-xl font-bold transition ${
+                      availableRanks.includes(rank)
+                        ? 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                    }`}
+                  >
+                    {rank}
+                  </button>
+                ))}
+              </div>
+              
+              {Object.keys(rankings).length > 0 && (
+                <div className="mt-8 text-left">
+                  <p className="text-sm text-gray-500 mb-2">Your rankings so far:</p>
+                  <div className="space-y-1">
+                    {Object.entries(rankings)
+                      .sort(([,a], [,b]) => a - b)
+                      .map(([idx, rank]) => (
+                      <div key={idx} className="text-sm text-gray-400">
+                        <span className="text-blue-400 font-semibold">{rank}.</span> {items[idx]}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <button
+                onClick={resetGame}
+                className="mt-8 text-gray-500 hover:text-gray-300 transition text-sm"
+              >
+                ← Pick different category
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (gamePhase === 'results') {
+        const sortedResults = getSortedResults();
+        
+        return (
+          <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+            <div className="max-w-md w-full text-center">
+              <h1 className="text-3xl font-bold mb-2">Your {selectedCategory.name} Rankings</h1>
+              <p className="text-gray-400 mb-6">No regrets... right?</p>
+              
+              <div className="space-y-3 mb-8">
+                {sortedResults.map(({ item, rank }) => (
+                  <div
+                    key={rank}
+                    className={`flex items-center rounded-lg p-4 ${
+                      rank === 1 ? 'bg-yellow-900/50 border border-yellow-600' :
+                      rank === 5 ? 'bg-red-900/30 border border-red-800' :
+                      'bg-gray-800'
+                    }`}
+                  >
+                    <span className={`text-2xl font-bold w-10 ${
+                      rank === 1 ? 'text-yellow-400' :
+                      rank === 5 ? 'text-red-400' :
+                      'text-blue-400'
+                    }`}>{rank}</span>
+                    <span className="text-xl">{item}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={playAgainSameCategory}
+                  className="bg-blue-600 hover:bg-blue-700 py-3 px-6 rounded-lg transition font-semibold"
+                >
+                  Play Again
+                </button>
+                <button
+                  onClick={resetGame}
+                  className="bg-gray-700 hover:bg-gray-600 py-3 px-6 rounded-lg transition font-semibold"
+                >
+                  New Category
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      return null;
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<RankBlindly />);
+  </script>
+</body>
+</html>
